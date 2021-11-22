@@ -1,0 +1,92 @@
+	
+
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd">
+<!-- 
+	<context:component-scan base-package="model" /> -->
+	
+	
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+<property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+<property name="url" value="jdbc:mysql://localhost:3306/jag" />  
+<property name="username" value="root" />  
+<property name="password" value="" />  
+</bean>  
+  
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+   	<property name="dataSource" ref="ds" />
+   	<property name="hibernateProperties">
+   		<props>
+   			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+   			<prop key="hibernate.show_sql">true</prop>
+   		</props>
+   	</property>
+   	<property name="annotatedClasses">
+   		<list>
+   			<value>model.Employee</value>
+   		</list>
+   	</property>
+   </bean>
+   
+   <bean id="ht" class="org.springframework.orm.hibernate5.HibernateTemplate" >
+   	<property name="sessionFactory">
+   	<ref bean="sessionFactory" />
+   	</property>
+   </bean>
+         
+<bean id="edao" class="model.EmployeeDAO">  
+<!-- <property name="ht" ref="ht"></property>   -->
+</bean>   
+
+	
+</beans>
+	
+
+
+package model;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.orm.hibernate5.HibernateTemplate;  
+
+public class EmployeeDAO {  
+	HibernateTemplate ht;  
+
+
+	public HibernateTemplate getHt() {
+		return ht;
+	}
+	public void setHt(HibernateTemplate ht) {
+		this.ht = ht;
+	}
+	//method to save employee  
+	public void saveEmployee(Employee e){  
+		ht.save(e);  
+	}  
+	//method to update employee  
+	public void updateEmployee(Employee e){  
+		ht.update(e);  
+	}  
+	//method to delete employee  
+	public void deleteEmployee(Employee e){  
+		ht.delete(e);  
+	}  
+	//method to return one employee of given id  
+	public Employee getById(int id){  
+		Employee e=(Employee)ht.get(Employee.class,id);  
+		return e;  
+	}  
+	//method to return all employees  
+	public List<Employee> getEmployees(){  
+		List<Employee> list=new ArrayList<Employee>();  
+		list=ht.loadAll(Employee.class);  
+		return list;  
+	}  
+}  

@@ -1,0 +1,122 @@
+<dependency>
+    <groupId>com.github.librepdf</groupId>
+    <artifactId>openpdf</artifactId>
+    <version>1.3.8</version>
+</dependency>
+
+Spring Boot Export Data to PDF  (*to print only one row on given condition*)
+
+=================in controller :=========================
+
+@GetMapping("/users/export/pdf/{userName}")
+	    public void exportToPDF(@PathVariable String userName,HttpServletResponse response) throws DocumentException, IOException {
+	        response.setContentType("application/pdf");
+	       // DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	        String localDate = sdf.format(new Date(0));
+	       // LocalDateTime now = LocalDateTime.now(); 
+	        String headerKey = "Content-Disposition";
+	        String headerValue = "attachment; filename=MyReport" + localDate + ".pdf";
+	        response.setHeader(headerKey, headerValue);
+	         
+	      //  List<User> listUsers = service.listAll();
+	         Slots slot= ss.readbyUsername(userName);
+	        UserPDFExporter exporter = new UserPDFExporter(slot);
+	        exporter.export(response);
+	         
+	    }
+	
+
+==============to generate pdf and give data to pdf :==============================
+
+
+package com.cts.hms.pac.controller;
+
+import java.awt.Color;
+import java.io.IOException;
+import java.util.List;
+ 
+import javax.servlet.http.HttpServletResponse;
+
+import com.cts.hms.pac.entity.Slots;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.*;
+ 
+ 
+public class UserPDFExporter {
+   private Slots listUsers;
+   Slots slot =new Slots();
+     
+    public UserPDFExporter(Slots slot) {
+        this.slot = slot;
+   }
+ 
+    private void writeTableHeader(PdfPTable table) {
+        PdfPCell cell = new PdfPCell();
+       cell.setBackgroundColor(Color.white);
+        cell.setPadding(2);
+         
+        Font font = FontFactory.getFont(FontFactory.HELVETICA);
+        font.setColor(Color.red);
+        cell.setPhrase(new Phrase("User ID", font)); 
+     
+         //table.addCell("id");
+      
+        table.addCell(cell);
+        
+        
+        cell.setPhrase(new Phrase("Slot Date", font));
+        table.addCell(String.valueOf(slot.getId()));
+        table.addCell(cell); 
+         
+        cell.setPhrase(new Phrase("Slot Time", font));
+        table.addCell(String.valueOf(slot.getSlotDate()));
+       table.addCell(cell);
+         
+        cell.setPhrase(new Phrase("User Name", font));
+        table.addCell(slot.getSlotTime());
+        table.addCell(cell);
+         
+        cell.setPhrase(new Phrase("Center Name", font));
+        table.addCell(slot.getUserName()); 
+        table.addCell(cell);  
+        
+        cell.setPhrase(new Phrase("Vaccine Type", font));
+        table.addCell(slot.getCenterName());
+        
+        table.addCell(cell); 
+        table.addCell(slot.getVType());
+    }
+     
+ 
+      
+    public void export(HttpServletResponse response) throws DocumentException, IOException {
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, response.getOutputStream());
+         
+        document.open();
+        Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        font.setSize(18);
+        font.setColor(Color.green);
+         
+        Paragraph p = new Paragraph("Your Vaccine Slot Confirmation Report", font);
+        p.setAlignment(Paragraph.ALIGN_CENTER);
+         
+        document.add(p);
+         
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100f);
+        table.setWidths(new float[] {3.5f, 3.5f});
+        table.setSpacingBefore(40);
+         
+        writeTableHeader(table);
+       // writeTableData(table);
+         
+        document.add(table);
+         
+        document.close();
+         
+    }
+}
+
+

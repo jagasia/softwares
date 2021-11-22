@@ -1,0 +1,37 @@
+https://github.com/Java-Techie-jt/spring-security-jwt-example.git
+
+
+
+----------------------
+1) create a spring boot application with following dependencies. Add more if required
+	spring web
+	spring security
+
+2) add the following dependency to pom.xml
+
+<dependency>
+	<groupId>io.jsonwebtoken</groupId>
+	<artifactId>jjwt</artifactId>
+	<version>0.9.1</version>
+</dependency>
+
+3) create a "SecurityConfigurer" class in config package 
+	that extends WebSecurityConfigurerAdapter 
+	and override
+		configure(AuthenticationManagerBuilder) 
+		configure(HttpSecurity)
+	and couple of Beans
+		passwordEncoder()
+		authenticationManagerBean()
+
+4) 
+
+
+
+
+
+
+
+
+
+https://www.techgeeknext.com/spring/angular-spring-boot-jwt-authentication

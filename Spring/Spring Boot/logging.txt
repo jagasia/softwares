@@ -1,0 +1,4 @@
+logging.file.name=jag.log
+logging.pattern.rolling-file-name=MyApp-%d{yyyy-MM-dd}.%i.log
+
+logging.logback.rollingpolicy.file-name-pattern=MyApp-%d{yyyy-MM-dd}.%i.log

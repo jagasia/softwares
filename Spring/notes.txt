@@ -1,0 +1,46 @@
+type attribute:
+----------------
+	class Maths
+	{
+		Maths(int i, int j)
+		{
+		}
+		Maths(float i, float j)
+		{
+		}	
+		Maths(String i, String j)
+		{
+		}
+	}
+
+in bean.xml
+-------
+	<constructor-arg value="20" />
+	<constructor-arg value="30" />
+	
+	which constructor will be invoked?
+
+	ans:	cons with String
+
+	remove the cons with String. Now?
+	and:	first cons from the top
+
+
+Now:
+----
+		<constructor-arg value="20" type="int" />
+		<constructor-arg value="30" type="int" />
+
+==========================
+	Maths(int i, double j)
+	{
+	}
+
+	<constructor-arg value="20.0" />
+	<constructor-arg value="30" />
+
+	notice that even when the order of int and double is wrong, it is automatically found and applied.
+	
+	in order to give clarity:
+	<constructor-arg value="20.0" index="1" />
+	<constructor-arg value="30" index="0" />

@@ -1,0 +1,97 @@
+
+
+package model;
+
+import org.springframework.stereotype.Component;
+
+@Component("employee")
+public class Employee {
+	private int id;
+	private String firstName;
+	private String lastName;
+	public Employee()
+	{}
+	public Employee(int id, String firstName, String lastName) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	public void method1()
+	{
+		System.out.println("Thsi is employee method1 executed now ");
+	}
+	public void accept()
+	{
+		System.out.println("Employee class Accept method");
+	}
+}
+
+=========================================
+
+package model;
+
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@EnableAspectJAutoProxy
+@Component("logging")
+public class Logging {
+	@Pointcut("execution(* model.*.m*(..))")
+	public void selectAll()
+	{
+
+	}
+	
+	
+	
+	@Before("selectAll()")
+	public void beforeMethod()
+	{
+		System.out.println("before method is executed");
+	}
+	@After("selectAll()")
+	public void afterMethod()
+	{
+		System.out.println("After method is executed");
+	}
+	
+	@Pointcut("execution(* model.*.a*(..))")
+	public void aMethods()
+	{
+//		System.out.println("select all");
+	}
+	
+	@Before("aMethods()")
+	public void beforeAmethods()
+	{
+		System.out.println("before A methods");
+	}
+}

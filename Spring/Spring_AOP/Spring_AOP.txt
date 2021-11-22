@@ -1,0 +1,177 @@
+Spring AOP
+	Enables Aspect Oriented Programming in spring applications
+	Aspects enable Modularization of concerns
+	Adds cross cutting concern before, after around the actual logic
+	Easy to maintain code in the present and future
+
+
+
+  <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-aop</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjrt</artifactId>
+    <version>1.9.5</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.5</version>
+</dependency>
+
+
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" 
+   xmlns:aop = "http://www.springframework.org/schema/aop"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+   http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+
+   <aop:aspectj-autoproxy/>
+
+   <!-- Definition for student bean -->
+   <bean id = "student" class = "mygroup1.del_1123.Maths">
+      <property name = "no1"  value = "20" />
+      <property name = "no2"  value = "30"/>      
+   </bean>
+
+   <!-- Definition for logging aspect -->
+   <bean id = "logging" class = "mygroup1.del_1123.Logging"/> 
+      
+</beans>
+
+
+
+
+
+
+
+<aop:config>
+   <aop:aspect id = "myAspect" ref = "aBean">
+      <aop:pointcut id = "businessService"
+         expression = "execution(* com.xyz.myapp.service.*.*(..))"/>
+
+      <!-- a before advice definition -->
+      <aop:before pointcut-ref = "businessService" method = "doRequiredTask"/>
+
+      <!-- an after advice definition -->
+      <aop:after pointcut-ref = "businessService" method = "doRequiredTask"/>
+
+      <!-- an after-returning advice definition -->
+      <!--The doRequiredTask method must have parameter named retVal -->
+      <aop:after-returning pointcut-ref = "businessService"
+         returning = "retVal" method = "doRequiredTask"/>
+
+      <!-- an after-throwing advice definition -->
+      <!--The doRequiredTask method must have parameter named ex -->
+      <aop:after-throwing pointcut-ref = "businessService"
+         throwing = "ex" method = "doRequiredTask"/>
+
+      <!-- an around advice definition -->
+      <aop:around pointcut-ref = "businessService" method = "doRequiredTask"/>
+      ...
+   </aop:aspect>
+</aop:config>
+
+
+==========================================================
+-------===================================================
+@Aspect
+public class Logging {
+   /** Following is the definition for a pointcut to select
+      *  all the methods available. So advice will be called
+      *  for all the methods.
+   */
+   @Pointcut("execution(* model.*.*(..))")
+   private void selectAll(){}
+
+   /** 
+      * This is the method which I would like to execute
+      * before a selected method execution.
+   */
+   @Before("selectAll()")
+   public void beforeAdvice(){
+      System.out.println("Going to setup student profile.");
+   }
+
+   /** 
+      * This is the method which I would like to execute
+      * after a selected method execution.
+   */
+   @After("selectAll()")
+   public void afterAdvice(){
+      System.out.println("Student profile has been setup.");
+   }
+
+   /** 
+      * This is the method which I would like to execute
+      * when any method returns.
+   */
+   @AfterReturning(pointcut = "selectAll()", returning = "retVal")
+   public void afterReturningAdvice(Object retVal){
+      System.out.println("Returning:" + retVal.toString() );
+   }
+
+   /**
+      * This is the method which I would like to execute
+      * if there is an exception raised by any method.
+   */
+   @AfterThrowing(pointcut = "selectAll()", throwing = "ex")
+   public void AfterThrowingAdvice(IllegalArgumentException ex){
+      System.out.println("There has been an exception: " + ex.toString());   
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+package mygroup1.del_1123;
+
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect
+public class Logging {
+
+	@Before("execution(* display(..))")
+	public void beforeDisplay()
+	{
+		System.out.println("This is before executing display method");
+	}
+	@After("execution(* display(..))")
+	public void afterDisplay()
+	{
+		System.out.println("This is after the ....executing display method");
+	}
+}
+
+
+
+
+
+

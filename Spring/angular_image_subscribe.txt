@@ -1,0 +1,37 @@
+import { Component, OnInit, Pipe } from '@angular/core';
+import { Location } from '@angular/common';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { error } from '@angular/compiler/src/util';
+import { ProductServiceService } from 'src/app/product-service.service';
+import { ProductDetails } from 'src/app/product-details';
+import {DomSanitizer} from '@angular/platform-browser';
+
+
+@Component({
+  selector: 'app-product-details',
+  templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.css']
+})
+export class ProductDetailsComponent implements OnInit {
+
+  imageSrc: any;
+  testStr: {'testString': string};
+
+  constructor(private sanitizer: DomSanitizer) { }
+
+  ngOnInit() {  }
+
+  getImageString(){
+    this.productService.getImageString().subscribe(data=>{
+      this.testStr=data;
+      this.imageSrc=this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
+      + this.testStr.testString);
+    },error=>{
+      let txt: any;
+      let k: any;
+      txt = '';
+      for (k in error) {
+        txt += error[k];
+      }
+      console.log('Image could not be fetched '+txt);});
+  }

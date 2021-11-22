@@ -1,0 +1,147 @@
+in web.xml:
+<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/jsp/error.jsp</location>
+</error-page>
+
+
+=====================================
+
+public class SpringException extends RuntimeException{
+     
+   public SpringException(String message) {
+      super(message);
+   }
+}
+===================================================
+
+
+
+ @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
+   @ExceptionHandler({SpringException.class})
+   public String addStudent( @ModelAttribute("HelloWeb")Student student, 
+      ModelMap model) {
+      
+      if(student.getName().length() < 5 ){
+         throw new SpringException("Given name is too short");
+      } else {
+         model.addAttribute("name", student.getName());
+      }
+      
+      if( student.getAge() < 10 ){
+         throw new SpringException("Given age is too low");
+      } else {
+         model.addAttribute("age", student.getAge());
+      }
+      model.addAttribute("id", student.getId());
+      return "result";
+   }
+===============================
+<bean class = "org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+      <property name = "exceptionMappings">
+         <props>
+            <prop key = "com.jag.SpringException">
+               ExceptionPage
+            </prop>
+         </props>
+      </property>
+      <property name = "defaultErrorView" value = "error"/>		<!-- error.jsp -->
+   </bean>
+
+package controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import model.Vehicle;
+import model.VehicleService;
+
+@Controller
+public class VehicleController {
+	@Autowired
+	VehicleService vs;
+	@RequestMapping("/")
+	public ModelAndView home()
+	{
+		return select(0);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/save", params = "add")
+	@ExceptionHandler({NumberFormatException.class, ArithmeticException.class})
+	public ModelAndView addVehicle(@Valid @ModelAttribute("vehicle")Vehicle vehicle, BindingResult result)
+	{	
+		
+		  int x=0; 
+		  int y=0; 
+		  if(x==y) throw new
+		  NumberFormatException("This is my arith exception");
+		 
+//		result.addError(new FieldError("vehicle", "name", "Name is invalid according to my rule"));
+		result.addError(new FieldError("vehicle", "name", "This  is jag"));
+		if(result.hasErrors())
+		{
+			System.out.println("Error is there");
+			ModelAndView mv=new ModelAndView();
+			mv.setViewName("vehicle");			
+			List<Vehicle> vehicles = vs.read();
+			mv.addObject("vehicles", vehicles);
+			return mv;
+		}
+		System.out.println("No error");
+		vehicle.setId(0);
+		vs.add(vehicle);
+		return home();
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/save", params = "update")
+	public ModelAndView updateVehicle(@Valid @ModelAttribute("vehicle")Vehicle vehicle, BindingResult result)
+	{
+		if(result.hasErrors())
+		{
+			System.out.println("Error is there");
+			ModelAndView mv=new ModelAndView();
+			mv.setViewName("vehicle");
+			List<Vehicle> vehicles = vs.read();
+			mv.addObject("vehicles", vehicles);
+			return mv;
+		}
+		System.out.println("No errors");
+		vs.update(vehicle);
+		return home();
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/save", params = "delete")
+	public ModelAndView deleteVehicle(@RequestParam("id")int id)
+	{
+		vs.delete(id);
+		return home();
+	}
+	@RequestMapping("/select")
+	public ModelAndView select(@RequestParam("id") int id)
+	{
+		ModelAndView mv=new ModelAndView();
+		List<Vehicle> vehicles = vs.read();
+		mv.addObject("vehicles", vehicles);
+		
+		
+		Vehicle vehicle = new Vehicle();
+		if(id!=0)
+			vehicle=vs.read(id);
+		else
+			vehicle=vehicles.get(0);
+		mv.addObject("vehicle",vehicle);
+		
+		mv.setViewName("vehicle");
+	
+		return mv;
+	}
+}

@@ -1,0 +1,63 @@
+component.html
+----------------
+  <form>...
+      Select Image:
+      <input type="file" name="" id="" class="form-control" (change)="onFileChanged($event)">
+      <input type="button" value="Upload" (click)="onUpload()">
+
+    </form>
+
+===========================
+component.ts
+-------------
+ title = 'image-upload';
+  selectedFile: File;
+  retrievedImage: any;
+  base64Data: any;
+  retrieveResonse: any;
+  message: string;
+  imageName: any;
+
+
+onFileChanged(event)
+  {
+    this.selectedFile=event.target.files[0];
+    console.log(JSON.stringify(this.selectedFile));
+  }
+  onUpload()
+  {
+    console.log(this.selectedFile);
+    
+    //FormData API provides methods and properties to allow us easily prepare form data to be sent with POST HTTP requests.
+    const uploadImageData = new FormData();
+    uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
+    console.log(uploadImageData);
+
+    this.http.post('http://localhost:8080/image/upload',uploadImageData).subscribe(data=>console.log(data));
+  }
+===============================================================
+spring boot controller:
+-------------------------
+
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/image")
+public class ImageController {
+	
+	
+	@PostMapping("/upload")
+	public String uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
+
+		System.out.println("Original Image Byte Size - " + file.getBytes().length);
+		File f=new File(file.getOriginalFilename());
+		FileOutputStream fos=new FileOutputStream(f);
+		fos.write(file.getBytes());
+		fos.flush();
+		fos.close();
+		System.out.println("Image file created at "+f.getAbsolutePath());
+		return "success";
+	}
+	
+	
+	
+}

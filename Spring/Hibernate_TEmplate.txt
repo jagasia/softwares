@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>pranesh-project-1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>pranesh-project-1</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>jstl</artifactId>
+    <version>1.2</version>
+</dependency>
+	
+	
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+	</dependency>
+	     <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.47</version>
+</dependency>
+      <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>5.2.7.RELEASE</version>
+		</dependency>
+
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.2.2.Final</version>
+</dependency>
+	
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+////////			application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/jag
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.jpa.database-platform = org.hibernate.dialect.MySQL5Dialect
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto = update
+spring.mvc.view.prefix=/WEB-INF/jsp/
+spring.mvc.view.suffix=.jsp
+
+
+
+
+
+/////////////			bean.xml
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd">
+<!-- 
+	<context:component-scan base-package="model" /> -->
+	
+	
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+<property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+<property name="url" value="jdbc:mysql://localhost:3306/jag" />  
+<property name="username" value="root" />  
+<property name="password" value="" />  
+</bean>  
+  
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+   	<property name="dataSource" ref="ds" />
+   	<property name="hibernateProperties">
+   		<props>
+   			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+   			<prop key="hibernate.show_sql">true</prop>
+   		</props>
+   	</property>
+   	<property name="annotatedClasses">
+   		<list>
+   			<value>com.example.demo.Employee</value>
+   		</list>
+   	</property>
+   </bean>
+   
+   <bean id="ht" class="org.springframework.orm.hibernate5.HibernateTemplate" >
+   	<property name="sessionFactory">
+   	<ref bean="sessionFactory" />
+   	</property>
+   </bean>
+         
+<bean id="edao" class="com.example.demo.EmployeeDAO">  
+<property name="ht" ref="ht"></property>  
+</bean>   
+
+	
+</beans>
+
+
+
+///////////
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+@SpringBootApplication
+public class PraneshProject1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(PraneshProject1Application.class, args);
+		  ApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+	        EmployeeDAO edao= (EmployeeDAO) ctx.getBean("edao");
+	        List<Employee> emps = edao.getEmployees();
+	        for(Employee e:emps)
+	        	System.out.println(e);
+	}
+
+}
+
+
+
+
+
+package com.example.demo;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Employee")
+public class Employee {
+	@Id							//primary key
+	private int employeeId;
+	private String firstName;
+	private String lastName;
+	
+	public Employee() {}
+
+	public Employee(int employeeId, String firstName, String lastName) {
+		super();
+		this.employeeId = employeeId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+package com.example.demo;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.orm.hibernate5.HibernateTemplate;  
+
+public class EmployeeDAO {  
+	HibernateTemplate ht;  
+
+
+	public HibernateTemplate getHt() {
+		return ht;
+	}
+	public void setHt(HibernateTemplate ht) {
+		this.ht = ht;
+	}
+	//method to save employee  
+	public void saveEmployee(Employee e){  
+		ht.save(e);  
+	}  
+	//method to update employee  
+	public void updateEmployee(Employee e){  
+		ht.update(e);  
+	}  
+	//method to delete employee  
+	public void deleteEmployee(Employee e){  
+		ht.delete(e);  
+	}  
+	//method to return one employee of given id  
+	public Employee getById(int id){  
+		Employee e=(Employee)ht.get(Employee.class,id);  
+		return e;  
+	}  
+	//method to return all employees  
+	public List<Employee> getEmployees(){  
+		List<Employee> list=new ArrayList<Employee>();  
+		list=ht.loadAll(Employee.class);  
+		return list;  
+	}  
+} 

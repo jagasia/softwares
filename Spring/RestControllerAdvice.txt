@@ -1,0 +1,48 @@
+@RestControllerAdvice
+public class ControllerExceptionHandler {
+  
+  @ExceptionHandler(value = {ResourceNotFoundException.class, CertainException.class})
+  @ResponseStatus(value = HttpStatus.NOT_FOUND)
+  public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    ErrorMessage message = new ErrorMessage(
+        status,
+        date,
+        ex.getMessage(),
+        description);
+    
+    return message;
+  }
+}
+-----------------------------------------
+You can just understand it as:
+
+@RestControler = @Controller + @ResponseBody
+@RestControllerAdvice = @ControllerAdvice + @ResponseBody
+Let’s do the thing with @ControllerAdvice and @ResponseBody:
+
+
+@ControllerAdvice
+@ResponseBody
+public class ControllerExceptionHandler {
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  @ResponseStatus(value = HttpStatus.NOT_FOUND)
+  public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    ErrorMessage message = new ErrorMessage(...);
+    return message;
+  }
+}
+
+-----------------------------------------------
+If you use @ControllerAdvice without @ResponseBody and @ResponseStatus, you can return ResponseEntity object instead.
+
+@ControllerAdvice
+public class ControllerExceptionHandler {
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<ErrorMessage> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    ErrorMessage message = new ErrorMessage...);
+    
+    return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
+  }
+}

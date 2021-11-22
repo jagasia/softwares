@@ -1,0 +1,117 @@
+<dependency>  
+    <groupId>org.springframework</groupId>  
+    <artifactId>spring-webmvc</artifactId>  
+    <version>5.1.1.RELEASE</version>  
+</dependency>  
+  
+<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->  
+<dependency>    
+    <groupId>javax.servlet</groupId>    
+    <artifactId>servlet-api</artifactId>    
+    <version>3.0-alpha-1</version>    
+</dependency>  
+
+
+@Controller  
+public class HelloController {  
+@RequestMapping("/")  
+    public String display()  
+    {  
+        return "index";  
+    }     
+}  
+
+
+-------web.xml---------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>del2</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+     <servlet>    
+    <servlet-name>spring</servlet-name>    
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>    
+    <load-on-startup>1</load-on-startup>      
+</servlet>    
+<servlet-mapping>    
+    <servlet-name>spring</servlet-name>    
+    <url-pattern>/</url-pattern>    
+</servlet-mapping>    
+</web-app>  
+----------------------
+-servlet.xml
+----------
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xsi:schemaLocation="  
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context.xsd  
+        http://www.springframework.org/schema/mvc  
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">  
+  
+    <!-- Provide support for component scanning -->  
+    <context:component-scan base-package="controller" />  
+  
+    <!--Provide support for conversion, formatting and validation -->  
+    <mvc:annotation-driven/>  
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+</beans>  
+----------
+<html>  
+<body>  
+<p>Welcome to Spring MVC Tutorial</p>  
+</body>  
+</html>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="https://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/spring.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+</web-app>

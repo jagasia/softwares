@@ -1,0 +1,115 @@
+    <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-aop</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjrt</artifactId>
+    <version>1.9.5</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.5</version>
+</dependency>
+
+=============================================================
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+     <aop:aspectj-autoproxy/>
+<bean name="logging" class="model.Logging" />
+<bean name="employee" class="model.Employee" p:id="13"
+		p:name="Raja">
+</bean>
+</beans>
+
+===========================================================
+
+package model;
+
+public class Employee {
+	private int id;
+	private String name;
+	public Employee() {}
+	public Employee(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + "]";
+	}
+	public void method1()
+	{
+		System.out.println("This is employee method 1");
+	}
+}
+=============================================================
+
+package model;
+
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+
+@Aspect
+public class Logging {
+	
+	@Pointcut("execution(* model.*.*(..))")
+	public void selectAll()
+	{
+		
+	}
+	@Before("selectAll()")
+	public void beforeAdvice()
+	{
+		System.out.println("This is before advice");
+	}
+	@After("selectAll()")
+	public void afterAdvice()
+	{
+		System.out.println("THis is after advice");
+	}
+}
+
+==============================================================
+
+ClassPathXmlApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+    	Employee employee=(Employee) ctx.getBean("employee");
+    	employee.method1();
+        System.out.println( "Hello World!" );

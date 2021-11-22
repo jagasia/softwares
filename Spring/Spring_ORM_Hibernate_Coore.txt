@@ -1,0 +1,264 @@
+pom.xml	
+		spring-context	(5.2.7)
+		mysql-connector	(5.1.47)
+		spring-orm	(5.2.7)
+		hibernate-core	(5.2.5)
+
+1) Branch.java
+	@Entity
+		@Id
+		@GeneratedValue 	strategy
+2) BranchDAO.java
+	JdbcTemplate	is replaced by HibernateTemplate
+			HibernateTemplate depends on LocalSessionFactory which depends on DriverManagerDataSource
+
+	also use HibernateTransactionManager bean in bean.xml that has a property ref to sessionFactory
+3) App.java
+	main method
+
+pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>mygroup</groupId>
+  <artifactId>another-demo-21</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>another-demo-21</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+     <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.47</version>
+</dependency>
+      <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>5.2.7.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.5.Final</version>
+		</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+bean.xml
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:tx="http://www.springframework.org/schema/tx"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<tx:annotation-driven/>
+	<context:component-scan base-package="mygroup.another_demo_21.model" />
+	
+   <bean id = "dmds" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+   	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+      <property name = "url" value = "jdbc:mysql://localhost:3306/bank"/>
+      <property name="username" value="root" />
+      <property name="password" value="" />
+   </bean>
+   
+   <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+   	<property name="dataSource" ref="dmds" />
+   	<property name="hibernateProperties">
+   		<props>
+   			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+   			<prop key="hibernate.show_sql">true</prop>
+   		</props>
+   	</property>
+   	<property name="annotatedClasses">
+   		<list>
+   			<value>mygroup.another_demo_21.model.Branch</value>
+   		</list>
+   	</property>
+   </bean>	
+   
+   <bean id="ht" class="org.springframework.orm.hibernate5.HibernateTemplate" >
+   	<property name="sessionFactory" >
+   	<ref bean="sessionFactory" />
+   	</property>
+   </bean>
+   
+   <bean name="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+   <property name="sessionFactory" ref="sessionFactory" />
+   </bean>
+   
+ <!--   <bean id="jt1" class="org.springframework.jdbc.core.JdbcTemplate">
+   	<property name="dataSource">
+   		<ref bean="dmds" />
+   	</property>   	
+   </bean> -->
+
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Branch.java
+package mygroup.another_demo_21.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name="branch")
+public class Branch {
+	@Id
+	private String bid;
+	private String bname;
+	private String bcity;
+	public Branch() {}
+	public Branch(String bid, String bname, String bcity) {
+		super();
+		this.bid = bid;
+		this.bname = bname;
+		this.bcity = bcity;
+	}
+	public String getBid() {
+		return bid;
+	}
+	public void setBid(String bid) {
+		this.bid = bid;
+	}
+	public String getBname() {
+		return bname;
+	}
+	public void setBname(String bname) {
+		this.bname = bname;
+	}
+	public String getBcity() {
+		return bcity;
+	}
+	public void setBcity(String bcity) {
+		this.bcity = bcity;
+	}
+	@Override
+	public String toString() {
+		return "Branch [bid=" + bid + ", bname=" + bname + ", bcity=" + bcity + "]";
+	}
+	
+}
+
+
+
+
+BranchDAO.java
+package mygroup.another_demo_21.model;
+
+import java.io.Serializable;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component("bdao")
+public class BranchDAO {
+	
+	@Autowired
+	HibernateTemplate ht;
+	
+	@Transactional
+	public String create(Branch branch)
+	{
+		return (String) ht.save(branch);
+	}
+	public void read() {}
+	public void update() {}
+	public void delete() {}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+App.java
+package mygroup.another_demo_21;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import mygroup.another_demo_21.model.Branch;
+import mygroup.another_demo_21.model.BranchDAO;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World! today" );
+        ApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+        BranchDAO bdao= (BranchDAO) ctx.getBean("bdao");
+        Branch branch=new Branch("B00025","KK Nagar","Chennai");
+        String result=bdao.create(branch);
+        System.out.println(result);
+    }
+}

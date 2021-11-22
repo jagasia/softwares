@@ -1,0 +1,60 @@
+for image Base64 encoding
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+
+in spring-servlet.xml
+
+<bean id="multipartResolver"   class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="2097152" />
+</bean>
+
+
+in entity class
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dateOfJoining;
+
+
+in controller
+@RequestMapping(value = "/add", method = RequestMethod.POST)
+//	public void add(@ModelAttribute("assoicate") Associate associate,@RequestParam("picture") MultipartFile picture) throws IOException
+	@ResponseBody
+	public ModelAndView add(@ModelAttribute("assoicate") Associate associate, HttpSession session) throws IOException
+	{
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+		AssociateDao adao=(AssociateDao) ctx.getBean("adao");
+		adao.create(associate);
+		ModelAndView mv=new ModelAndView();
+		mv.setViewName("upload");
+//		mv.addObject("associate", associate);
+		session.setAttribute("associate", associate);
+		return mv;
+	}
+	
+	
+
+	@RequestMapping(value="/savePicture", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView savePicture(@RequestParam("picture") MultipartFile picture, HttpSession session) throws IOException
+	{
+		byte[] data = picture.getBytes();
+		Associate associate = (Associate) session.getAttribute("associate");
+		associate.setPicture(data);
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+		AssociateDao adao=(AssociateDao) ctx.getBean("adao");
+		adao.update(associate);		
+		return home();
+	}
+
+
+------------------------------------------
+Spring validations:
+-------------------
+1) In the entity class itself we define the rules using annotations
+2) In the controller method, use
+	@Valid
+		and
+	BindingResult

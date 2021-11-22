@@ -1,0 +1,12 @@
+MockMVC
+https://www.onlinetutorialspoint.com/spring-boot/spring-boot-mockmvc-junit-test-example.html
+ @Test
+    public void getAllItems() throws Exception {
+        List<Item> items = Arrays.asList(new Item(1,"iPhoneX","Mobiles"));
+        Mockito.when(itemRepository.getAllItems()).thenReturn(items);
+        mockMvc.perform(MockMvcRequestBuilders.get("/getAllItems"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+

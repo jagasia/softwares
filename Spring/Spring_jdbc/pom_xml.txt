@@ -1,0 +1,124 @@
+   <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jdbc</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.47</version>
+</dependency>
+
+
+
+
+
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd"   
+   >
+   
+   <context:component-scan base-package="group_1.my_jdbc_project_1" />
+
+   <bean id = "dmds" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
+      <property name="url" value="jdbc:mysql://localhost:3306/bank" />
+      <property name="username" value="root" />
+      <property name="password" value="" />
+      
+   </bean>
+   <bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate">
+   	<property name="dataSource">
+   		<ref bean="dmds" />
+   	</property>
+   </bean>
+
+	
+</beans>
+
+
+
+
+package group_1.my_jdbc_project_1;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World! today is friday....," );
+        String sql="";
+        //drivermanager
+        //jdbctemplate
+        ApplicationContext ctx=new ClassPathXmlApplicationContext("spring.xml");
+        DriverManagerDataSource dmds=(DriverManagerDataSource) ctx.getBean("dmds");
+      //  DriverManagerDataSource dmds=new DriverManagerDataSource();
+//        dmds.setDriverClassName("com.mysql.jdbc.Driver");
+//        dmds.setUrl("jdbc:mysql://localhost:3306/bank");
+//        dmds.setUsername("root");
+//        dmds.setPassword("");
+        
+
+          JdbcTemplate jt=(JdbcTemplate) ctx.getBean("jt");
+//        JdbcTemplate jt=new JdbcTemplate();
+//        jt.setDataSource(dmds);
+        
+        //insert, update, delete		st.executeUpdate();
+//        sql="INSERT INTO branch VALUES(?,?,?)";
+//        jt.update(sql, "B00015","M.G.Road","Bengaluru");
+//        System.out.println("Please check db");
+//        
+//          sql="SELECT * FROM branch WHERE bid=?";
+//          Branch branch = jt.queryForObject(sql, new BranchRowMapper(),"B00001");
+//          System.out.println(branch);
+          
+//          sql="SELECT * FROM branch";
+//          List<Branch> branches = jt.query(sql,new BranchRowMapper());
+//          for(Branch b : branches)
+//        	  System.out.println(b);
+          
+//          BranchDAO bdao=new BranchDAO();
+//          bdao.setJt(jt);
+          BranchDAO bdao=(BranchDAO) ctx.getBean("bdao");
+          
+          List<Branch> branches = bdao.read();
+          for(Branch b: branches)
+        	  System.out.println(b);
+          
+    }
+}
