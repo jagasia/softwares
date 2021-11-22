@@ -1,0 +1,125 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function(){
+		$("#op").change(function(){
+			var no1=$("#no1").val();
+			var no2=$("#no2").val();
+			var op=$(this).val();
+			
+			$.ajax(
+					{
+						url:"ms?no1="+no1+"&no2="+no2+"&op="+op,
+						success:function(result){
+							$("#divResult").html(result);
+						}});
+		});
+	});
+</script>
+</head>
+<body>
+	Number 1: <input type=number id=no1 /><br/>
+	Number 2: <input type=number id=no2 /><br/>
+	<select id="op">
+		<option>Choose...</option>
+		<option>Add</option>
+		<option>Subtract</option>
+		<option>Multiply</option>
+		<option>Divide</option>
+	</select>
+	<div id="divResult"></div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class MyServlet
+ */
+@WebServlet({ "/MyServlet", "/ms" })
+public class MyServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public MyServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int no1=Integer.parseInt(request.getParameter("no1"));
+		int no2=Integer.parseInt(request.getParameter("no2"));
+		String op=request.getParameter("op");
+		float result=0;
+		switch(op)
+		{
+		case "Add":
+			result=no1+no2;
+			break;
+		case "Subtract":
+			result=no1-no2;
+			break;
+		case "Multiply":
+			result=no1*no2;
+			break;
+		case "Divide":
+			result=(float)no1/no2;
+			break;
+		}
+		PrintWriter out = response.getWriter();
+		out.print(result);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

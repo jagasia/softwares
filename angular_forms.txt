@@ -1,0 +1,33 @@
+in app.module.ts
+
+	import { FormsModule } from '@angular/forms';
+
+  imports: [
+    BrowserModule,
+    FormsModule,	(....add this line....)
+    RouterModule.forRoot(appRoutes),
+    AppRoutingModule
+  ],
+
+in component.html template,
+add form
+
+<form #signup = "ngForm" (ngSubmit) = "onSubmit(signup.value)" >
+
+//inside the form each form element that is part of model should have name and ngModel attribute.
+
+<form #signup = "ngForm" (ngSubmit) = "onSubmit(signup.value)" >
+    user id: <input type="text" name="userid" id="userid" ngModel><br/>
+    password: <input type="password" name="" id="password"><br/>
+    first name:<input type=text id=firstName /><br/>
+    last name: <input type=text id="lastName" /><br/>
+    <input type="submit" value="Login">
+</form>
+//
+in component.ts (inside export class)
+  onSubmit=function (data)
+  {
+//      alert('submitted');
+console.log('submitted');
+console.log(data);
+}

@@ -1,0 +1,110 @@
+Kafka		Distributed Stream processing System
+
+	is a Hybrid between 
+		Publish/ Subsrcibe Messaging System and a Database
+
+	Producers are publishers 
+	Receivers are subscribers
+
+
+	Reliable and high throughput platform
+	Real time data streams
+	Data pipeline
+	Single place for storing and distributing events
+
+	
+	ETL	Extract, Transform, Load
+	CDC	Change Data Capture
+	Big data ingest
+
+
+Twitter
+Netflix
+LinkedIn
+Paypal
+
+open sourced in 2011
+
+------------------------
+Kafka broker (port 9092)
+
+
+Architecture
+	Producer
+	Consumer
+	Broker
+	Topics
+	Partitions	(topics split into partitions)
+
+------------------
+Queue vs Publish/Subscribe
+
+	Queue: Message is published once, consumed once
+	Pub/Sub: Message is published once, consumed many times
+
+
+Pub/Sub:
+-------
+	Upload service
+	Compress service
+	Format service
+	Notification service
+
+
+
+How Kafka combine both "Queue" and "Pub/sub"?
+	Consumer Group
+
+
+------------------------installation
+https://www.confluent.io/blog/set-up-and-run-kafka-on-windows-linux-wsl-2/#enable-windows-subsystem
+
+
+
+
+
+
+
+
+
+
+
+version: '3'
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    hostname: zookeeper
+    restart: unless-stopped
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    #volumes:
+    #  - ./data/zookeeper:/bitnami/zookeeper
+  kafka:
+    image: 'bitnami/kafka:latest'
+    hostname: kafka
+    restart: unless-stopped
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - ./data/kafka:/bitnami/kafka
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://linuxhint.com/docker_compose_kafka/#:~:text=Docker-compose%20is%20the%20perfect%20partner%20for%20this%20kind,cluster%20if%20we%20use%20Docker%20Swarm%20or%20Kubernetes.

@@ -1,0 +1,6 @@
+Navigate to IAM in the AWS Console.
+Navigate to the aws-elasticbeanstalk-service-role (under Access Management > Roles).
+Attach the following policies:
+AutoScalingFullAccess
+ElasticLoadBalancingFullAccess
+I then rebuilt the environment, no more errors!

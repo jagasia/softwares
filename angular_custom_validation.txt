@@ -1,0 +1,41 @@
+import { FormBuilder, AbstractControl } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+
+@Component({
+  selector: 'reactive-form',
+  templateUrl: './reactive-form.component.html'
+})
+export class AppReactiveForm implements OnInit {
+  myForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit() {
+    this.myForm = this.fb.group({
+      phone: ['', [validatePhone]] // added the function in validators array of form-control
+    });
+  }
+}
+
+function validatePhone(control: AbstractControl): {[key: string]: any} | null  {
+  if (control.value && control.value.length != 10) {
+    return { 'phoneNumberInvalid': true };
+  }
+  return null;
+}
+
+
+
+
+
+ <div [ngClass]="{'has-error':!airlineForm.controls['phone'].valid && airlineForm.controls['phone'].touched}">
+        <input type="number" name="" id="" class="form-control" formControlName="phone">
+        <span class="help-block" *ngIf="airlineForm.controls['phone'].errors.required">
+            Id cannot be blank
+        </span>
+        <span class="alert alert-danger" *ngIf="airlineForm.controls['phone'].errors.phoneNumberInvalid">
+            Minumum 10
+        </span>
+    </div>    

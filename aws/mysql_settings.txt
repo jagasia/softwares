@@ -1,0 +1,25 @@
+amazon aws mysql:
+document link:	https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.managing.db.html
+	https://aws.amazon.com/rds/
+
+
+end point:	jag.cljtedwklhul.ap-south-1.rds.amazonaws.com
+port:		3306
+
+
+database:	jag
+user name:	root
+password:	rootuser
+
+
+
+
+
+url:		jdbc:mysql://localhost:3306/jag
+aws url:	jdbc:mysql://jag.cljtedwklhul.ap-south-1.rds.amazonaws.com:3306/jag
+
+
+go to configuration 
+	go to security groups
+		choose the active group and 
+			set "all traffic"	and "all regions"

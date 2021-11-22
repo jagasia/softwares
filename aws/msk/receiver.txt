@@ -1,0 +1,12 @@
+Microsoft Windows [Version 10.0.19042.1165]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\rjaga>docker exec -it 98a2ea29060f bash
+bash-5.1# kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test
+this is also a message
+abcd
+1234
+efgh
+ijkl
+mnop
+qrst

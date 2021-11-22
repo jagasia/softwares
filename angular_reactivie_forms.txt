@@ -1,0 +1,33 @@
+<form>
+    Email:
+    <input type="email" name="" id="" [formControl]="email"><br>
+    {{email.value}}
+</form>
+
+email=new FormControl();
+
+ngInit()
+{
+	  this.email.setValue("rama");
+}
+
+
+
+
+
+
+<form [formGroup]="loginForm">
+	User Name: <input type=text formControlName="userName" /><br/>
+	Password: <input type=password formControlName="password" /><br/>
+</form>
+
+
+
+loginForm=new FormGroup({
+    userName:new FormControl(),
+    password:new FormControl()
+  });
+
+ ngOnInit(): void {
+    this.loginForm.patchValue({userName:'raja',password:'siva'});
+  }

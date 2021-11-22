@@ -1,0 +1,38 @@
+{{signupForm | json}}
+{{singupForm.firstName}}
+
+
+
+
+Angular (24 hrs)
+
+1. Introduction to TypeScript
+
+2. Introduction to Nodejs.
+
+3. Angular Evolution and Archetecture
+
+4. First Angular Project (Moduels, Components, Styling)
+
+5. Interpolation, Data Binding, Event Binding
+	Interpolation
+		{{firstName}}
+	property binding
+		<p bind-align="left" > this is a para</p>
+
+		<p [align]="left" > this is a para</p>
+
+	event binding
+	<input type="button" (onclick)="fn1()" />
+
+6. Form Handling (ngModel)
+
+7. Pipes Custom and Built-in
+
+8.Promise Versus Observable
+
+9. Routing
+
+10. Consuming REST apis using HttpClient.
+
+11. Error / Exception Handling."

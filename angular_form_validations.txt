@@ -1,0 +1,86 @@
+import { AbstractControl } from '@angular/forms';
+
+export function urlValidator(control: AbstractControl) {
+  if (!control.value.startsWith('https') || !control.value.includes('.me')) {
+    return { urlValid: true };
+  }
+  return null;
+}
+
+
+untouched True if control has not lost focus yet.
+touched True if control has lost focus.
+pristine True if user has not interacted with the control yet.
+dirty True if user has already interacted with the control.
+
+
+Based on the 
+	loginForm.valid		(true/false)
+The error style should be applied	(bootstrap style for error:	has-error	)
+
+
+
+
+export class LoginComponent implements OnInit {
+
+  loginForm:any;
+
+  constructor(private fb:FormBuilder) { 
+    this.loginForm=this.fb.group({
+      userName:['raja',Validators.required],
+      password:['rama',Validators.required],
+      email: ['', [Validators.required,
+        Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')]]
+    });
+  }
+
+
+<p>another works!</p>
+this is another
+<form [formGroup]="anotherForm">    
+User Name:
+<div class="form-group" [ngClass]="{'has-error':f.userName.errors && 
+anotherForm.get('userName').touched }">
+<input type="text" formControlName="userName" class="form-control">
+</div>
+Password:
+<input type="password" formControlName="password" class="form-control">
+Phone:
+<div class="form-group" [ngClass]="{'has-error':f.phone.errors && f.phone.touched}">
+<input type="number" name="" id="" formControlName="phone" class="form-control">
+<span class="invalid-feedback" *ngIf="(f.phone.touched || f.phone.dirty) && f.phone.invalid">
+    Password is required
+  </span>
+</div>
+<input type="submit" value="Submit" class="btn btn-info">
+</form>
+
+<br>
+{{ anotherForm.value | json}}
+
+
+
+
+
+
+
+
+
+
+
+<form [formGroup]="loginForm" (submit)="fn1()">
+    User Name:
+    <div class="form-group" [ngClass]="{'has-error':loginForm.get('userName').errors && loginForm.get('userName').touched } ">
+    <input class="form-control" type="text" formControlName="userName"><br>
+    
+    <span class="help-block" *ngIf="loginForm.get('userName').errors && loginForm.get('userName').touched">
+    <span *ngIf="loginForm.get('userName').errors.required">User Name is required</span>
+    </span>
+</div>
+<br>
+    Password:
+    <input class="form-control" type="password" formControlName="password"><br>
+    Email:
+    <input class="form-control" type="email" formControlName="email"><br>
+    <input class="btn btn-info" type="submit" value="Submit">
+</form>

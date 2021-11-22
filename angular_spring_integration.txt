@@ -1,0 +1,128 @@
+<p>branch works!</p>
+
+<form #frmBranch="ngForm" (ngSubmit) = "addBranch(frmBranch.value)" >
+    Branch ID: <input type="text" name="bid" id="" [(ngModel)]="branch.bid"><br>
+    Name: <input type="text" name="bname" id="" [(ngModel)]="branch.bname"><br>
+    City: <input type="text" name="bcity" id="" [(ngModel)]="branch.bcity"><br>
+    <input type="submit" value="Add Branch">
+</form>
+
+
+<button (click)="getBranches()">Get Branches</button><br>
+
+<table border="1" *ngIf="branches.length>0">
+    <thead><th>Branch ID</th>
+        <th>Name</th>
+        <th>City</th>
+    </thead>
+    <tr *ngFor="let b of branches">
+        <td>{{b.bid}}</td>
+        <td>{{b.bname}}</td>
+        <td>{{b.bcity}}</td>
+    </tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { Component, OnInit } from '@angular/core';
+import { Branch } from '../branch';
+import { BranchService } from '../branch.service';
+
+@Component({
+  selector: 'app-branch',
+  templateUrl: './branch.component.html',
+  styleUrls: ['./branch.component.css']
+})
+export class BranchComponent implements OnInit {
+  branch:Branch={bid:"B00040",bname:"Main Branch",bcity:"Kolkata"};
+  branches:any;
+  
+
+  constructor(private service : BranchService) { }
+
+  ngOnInit(): void {
+  }
+
+  getBranches()
+  {
+    this.service.getBranches().subscribe(data=>{ this.branches=data;  console.log(data);  });
+  }
+
+  addBranch(branch)
+  {
+    console.log(branch);
+    // this.service.addBranch(branch);
+    this.service.addBranch(branch).subscribe(data=>{ console.log(data);   });
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Branch } from './branch';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BranchService {
+
+  constructor(private http:HttpClient) { }
+
+  getBranches()
+  {
+    return this.http.get("http://localhost:8080/getBranches");
+  }
+
+  addBranch(branch:Branch)
+  {
+    console.log(branch);
+    return this.http.post("http://localhost:8080/add", branch );
+  }
+}
+
+
+
+
+export class Branch {
+    bid:string;
+    bname:string;
+    bcity:string;
+}
+----------------------------------------------------------------------
+
+
+@PostMapping("/add")
+	@ResponseBody
+	public String addBranch1(@RequestBody Branch branch)
+	{
+		System.out.println(branch);
+		ApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+		BranchDAO bdao=(BranchDAO) ctx.getBean("bdao");
+		bdao.create(branch);
+		return "added";
+	}
+	

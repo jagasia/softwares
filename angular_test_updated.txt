@@ -1,0 +1,79 @@
+1) EmployeeService and FormBuilder dependencies are injected into the EmployeeComponent constructor.
+so they are declared in the providers and imports: (TestBed.configureTestingModule)
+
+providers:[EmployeeService, FormBuilder],
+imports:[HttpClientTestingModule],
+full code: employee.component.spec.ts
+------------------------------------
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { EmployeeService } from '../employee.service';
+
+import { EmployeeComponent } from './employee.component';
+
+describe('EmployeeComponent', () => {
+  let component: EmployeeComponent;
+  let fixture: ComponentFixture<EmployeeComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ EmployeeComponent ],
+      providers:[EmployeeService, FormBuilder],
+      imports:[HttpClientTestingModule]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(EmployeeComponent);
+    component = fixture.componentInstance;
+    
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+//   it('find employee by id should return ',()=>{
+//     component.findById(1);
+//     let employee=JSON.stringify(component.employeeForm.value);
+
+//     expect(employee).toBe(`{
+//       "id": 1,
+//       "firstName": "Rama",
+//       "lastName": "Raja",
+//       "gender": "male"
+//     }`);
+//   })
+
+});
+
+-------------------------------------------------------------------------------------------
+2) HttpClient is injected into the EmployeeService. So we need to update imports and providers.
+complete code of employee.service.spec.ts: (inside TestBed.configureTestingModule({});)
+-----------------------------------------------------------------------
+
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+
+import { EmployeeService } from './employee.service';
+
+describe('EmployeeService', () => {
+  let service: EmployeeService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule], 
+        providers: [EmployeeService]
+    });
+    service = TestBed.inject(EmployeeService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+----------------------------------------

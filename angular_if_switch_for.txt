@@ -1,0 +1,57 @@
+
+
+<div *ngIf="isLoogedIn; else isLoogedOut">
+      Hello Admin
+    </div>
+
+    <ng-template #isLoogedOut>
+      Hello Admin
+    </ng-template>
+-------------------------------------------------
+
+<ng-container
+      *ngIf="isLoggedIn; then logIn; else logOut">
+    </ng-container>
+
+    <ng-template #logIn>
+        Hello, Admin
+    </ng-template>
+
+    <ng-template #logOut>
+        Please Signin
+    </ng-template>
+
+------------------------------------------------
+
+<ul [ngSwitch]="superhero">
+  <li *ngSwitchCase="'Groot'">Groot</li>
+  <li *ngSwitchCase="'Ironman'">Ironman</li>
+  <li *ngSwitchCase="'Hulk'">Hulk</li>
+  <li *ngSwitchCase="'Thor'">Thor</li>
+  <li *ngSwitchCase="'Spiderman'">Spiderman</li>
+  <li *ngSwitchDefault>Batman</li>
+</ul>
+
+
+<div *ngFor="let car of Cars" [ngSwitch]="car.color">
+      <div *ngSwitchCase="'blue'"
+          class="blue">
+        {{ car.name }} ({{ car.color }})
+      </div>
+      <div *ngSwitchCase="'yellow'"
+          class="yellow">
+        {{ car.name }} ({{ car.color }})
+      </div>
+      <div *ngSwitchCase="'silver'"
+          class="silver">
+        {{ car.name }} ({{ car.color }})
+      </div>
+      <div *ngSwitchCase="'red'"
+          class="red">
+        {{ car.name }} ({{ car.color }})
+      </div>
+      <div *ngSwitchDefault
+          class="text-warning">
+        {{ car.name }} ({{ car.color }})
+      </div>
+    </div>

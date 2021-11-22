@@ -1,0 +1,174 @@
+<p>employee works!</p>
+<form [formGroup]="employeeForm" ngNativeValidate>
+Id:
+<input type="number" class="form-control" formControlName="id" list="dlId" (change)="fnFindEmployeeById()">
+<datalist id="dlId">
+    <option *ngFor="let e of employees" [value]="e.id">{{e.id}}</option>
+</datalist>
+First Name:
+<input type="text" class="form-control" formControlName="firstName" required>
+Last Name:
+<input type="text" class="form-control" formControlName="lastName" required>
+Gender:
+<br>
+<input type="radio" name="gender" id="rdoMale" formControlName="gender" value="male"><label for="rdoMale">Male</label>&nbsp;
+<input type="radio" name="gender" id="rdoFemale" formControlName="gender" value="female"><label for="rdoFemale">Female</label>&nbsp;
+<input type="radio" name="gender" id="rdoOthers" formControlName="gender" value="others"><label for="rdoOthers">Others</label>&nbsp;
+
+<br>
+<input type="Button" value="Add" class="btn btn-info" (click)="fnCreateEmployee()">&nbsp;
+<input type="Button" value="Update" class="btn btn-info" (click)="fnUpdateEmployee()">&nbsp;
+<input type="Button" value="Delete" class="btn btn-info" (click)="fnDeleteEmployee()">&nbsp;
+<input type="reset" value="Reset" class="btn btn-warning">
+</form>
+<br>
+<table class="table table-hover table-striped" border="1">
+<thead>
+    <th>ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Gender</th>
+    <th></th>
+</thead>
+<tbody>
+    <tr *ngFor="let e of employees">
+        <td>{{ e.id }}</td>
+        <td>{{ e.firstName }}</td>
+        <td>{{ e.lastName }}</td>
+        <td>{{ e.gender | titlecase }}</td>        
+        <td><button class="btn btn-info" (click)="fn1(e.id)">Select</button></td>
+    </tr>
+</tbody>
+</table>
+
+--------------------------------------------------------------------------
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { EmployeeService } from '../employee.service';
+
+@Component({
+  selector: 'app-employee',
+  templateUrl: './employee.component.html',
+  styleUrls: ['./employee.component.css']
+})
+export class EmployeeComponent implements OnInit {
+  employeeForm:any;
+  employees:any;
+  employee:any;
+  id:any;
+  constructor(private es:EmployeeService, private fb:FormBuilder) { 
+    this.employeeForm=this.fb.group({
+      id:['',Validators.required],
+      firstName:['',Validators.required],
+      lastName:['',Validators.required],
+      gender:['',Validators.required]
+    });
+
+  }
+
+  ngOnInit(): void {
+    this.fnGetAllEmployees();
+  }
+
+  fnGetAllEmployees()
+  {
+    // let obs:Observable<any>= this.es.getEmployees();
+    // obs.subscribe();
+    this.es.getEmployees().subscribe(data=>this.employees=data);
+  }
+
+  findById(id)
+  {
+    this.es.findEmployeeById(id).subscribe(data=>{this.employee=data; 
+      this.employeeForm.patchValue(this.employee);
+    });
+  
+  }
+
+  fnFindEmployeeById()
+  {
+    // alert('finding...');
+    let id=this.employeeForm.get('id').value;
+    // alert("finding employee by id : "+id);
+    if(id==undefined || id==null)
+      return;
+  }
+
+  fnCreateEmployee()
+  {
+    this.employee=this.employeeForm.value;
+    // alert(JSON.stringify(employee));
+    let result:any;
+    this.es.createEmployee(this.employee).subscribe(data=>{result=data;this.fnGetAllEmployees();});
+   
+  }
+
+  fnUpdateEmployee()
+  {
+    // alert("updating...");
+    this.employee=this.employeeForm.value;
+    // alert(employee.id);
+    let result:any;
+    this.es.updateEmployee(this.employee).subscribe(data=>{
+      result=data;
+      this.fnGetAllEmployees();
+      this.fnFindEmployeeById();
+    }
+  );
+      
+    
+  }
+
+  fnDeleteEmployee()
+  {
+    let id=this.employeeForm.get('id').value;
+    if(id==undefined || id==null)
+      return;
+    let result:any;
+    this.es.deleteEmployee(id).subscribe(data=>result=data);
+    this.fnGetAllEmployees();
+  }
+  fn1(id)
+  {
+    // alert(id);
+    this.findById(id);
+  }
+}
+
+-------------------------------------------------------------------------
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EmployeeService {
+
+  url:string="http://localhost:3000/employees/";
+  constructor(private http:HttpClient) { }
+  
+  getEmployees()
+  {
+    return this.http.get(this.url);
+  }
+
+  findEmployeeById(id:any)
+  {
+    return this.http.get(this.url+id);
+  }
+
+  createEmployee(employee:any)
+  {
+    return this.http.post(this.url,employee);
+  }
+
+  updateEmployee(employee:any)
+  {
+    return this.http.put(this.url+employee.id,employee);
+  }
+
+  deleteEmployee(id:any)
+  {
+    return this.http.delete(this.url+id);
+  }
+}

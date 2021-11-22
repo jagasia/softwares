@@ -1,0 +1,29 @@
+<script>
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "ajax_info.txt", true);
+  xhttp.send();
+}
+</script>
+
+///// spring boot ajax javascript
+    var employeeId=document.getElementById("eid").value;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          //document.getElementById("demo").innerHTML =
+          var employee=JSON.parse(this.responseText);
+          document.getElementById("employeeId").value=employee.employeeId;
+          document.getElementById("firstName").value=employee.firstName;
+          document.getElementById("lastName").value=employee.lastName;
+  		
+        }
+      };
+      xhttp.open("GET", "${home}find5?employeeId="+employeeId, true);
+      xhttp.send();

@@ -1,0 +1,1 @@
+https://linuxhint.com/docker_compose_kafka/#:~:text=Docker-compose%20is%20the%20perfect%20partner%20for%20this%20kind,cluster%20if%20we%20use%20Docker%20Swarm%20or%20Kubernetes.

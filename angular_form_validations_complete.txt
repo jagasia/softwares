@@ -1,0 +1,83 @@
+import { AbstractControl } from '@angular/forms';
+
+export function urlValidator(control: AbstractControl) {
+  if (!control.value.startsWith('https') || !control.value.includes('.me')) {
+    return { urlValid: true };
+  }
+  return null;
+}
+
+
+<div class="container mt-4 pt-4">
+    <form [formGroup]="loginForm" class="border border-primary p-2 rounded shadow-md">
+        <div class="form-group">
+            <h2 class="text-center text-primary">Registation</h2>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter user name" formControlName="userName">
+            <div *ngIf="formControl.userName.errors">
+                <div *ngIf="formControl.userName.errors.required && formControl.userName.touched "
+                    [ngClass]="{'alert alert-danger':formControl.userName.errors}">* Required field</div>
+                <div *ngIf="formControl.userName.errors && formControl.userName.errors.minlength && formControl.userName.touched "
+                    [ngClass]="{'alert alert-danger':formControl.userName.errors}">* Minimum length 3 is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter email" formControlName="email">
+            <div *ngIf="formControl.email.errors && formControl.email.touched"
+                [ngClass]="{'alert alert-danger':formControl.email.errors}">* Required field</div>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter mobile number" formControlName="mobile">
+            <div *ngIf="formControl.mobile.errors && formControl.mobile.touched"
+                [ngClass]="{'alert alert-danger':formControl.mobile.errors}">* Required field</div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Enter your password" formControlName="password">
+            <div *ngIf="formControl.password.errors && formControl.password.touched"
+                [ngClass]="{'alert alert-danger':formControl.password.errors}">* Required field</div>
+        </div>
+        <div class="form-group text-center">
+            <input type="submit" value="Register" class="btn btn-success">
+        </div>
+    </form>
+</div>
+{{formControl.userName.errors | json}}
+
+--------------------------------------------------------------
+
+
+
+
+
+
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent implements OnInit {
+
+  loginForm:any;
+
+  constructor(private formBuilder:FormBuilder) {
+    this.loginForm = formBuilder.group({
+      userName:['',[Validators.required,Validators.minLength(3)]],
+      email:['',Validators.required],
+      mobile:['',Validators.required],
+      password:['',Validators.required]
+    })
+    this.loginForm.get("userName").updateValueAndValidity({'onlySelf':true});
+   }
+
+  ngOnInit(): void {
+    //alert(JSON.stringify());
+  }
+  get formControl(){
+    return this.loginForm.controls
+  }
+
+}

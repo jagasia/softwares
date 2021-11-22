@@ -1,0 +1,139 @@
+<form ngNativeValidate>		(for html5 validations)
+
+<div class="row">
+    <div class="col-md-3 form-group">
+        <form  (ngSubmit)="onClickSubmit()">
+            Employee Id:
+            <input class="form-control" type="number" name="employeeId" id="" [(ngModel)]="employee.employeeId"><br>
+            First Name:
+            <input class="form-control" type="text" name="firstName" id="" [(ngModel)]="employee.firstName"><br>
+            Last Name:
+            <input class="form-control" type="text" name="lastName" id="" [(ngModel)]="employee.lastName"><br>
+            Department:
+            <select class="form-control" name="department" id="" [(ngModel)]="employee.department">
+                <option *ngFor="let d of departments" [value]="d">{{d}}</option>
+            </select><br>
+            <input class="btn btn-success form-control" type="submit" value="Submit"><br>
+        </form>
+    </div>
+</div>
+----------------------------------------------------------------------------------
+
+<form #loginForm="ngForm" (submit)="fn2(loginForm.value)" ngNativeValidate>
+    User Name: <input type="text" name="userName" id="" ngModel required>
+    <input type="submit" value="Submit">
+</form>
+
+-------------------------------------------------------------------------------
+<div class="col-md-3 form-group">
+        <form #empForm="ngForm" (ngSubmit)="onClickSubmit(empForm.value)">
+            Employee Id:
+            <input class="form-control" type="number" name="employeeId" id="" ngModel><br>
+            First Name:
+            <input class="form-control" type="text" name="firstName" id="" ngModel><br>
+            Last Name:
+            <input class="form-control" type="text" name="lastName" id="" ngModel><br>
+            Department:
+            <select class="form-control" name="department" id="" ngModel>
+                <option *ngFor="let d of departments" [value]="d">{{d}}</option>
+            </select><br>
+            <input class="btn btn-success form-control" type="submit" value="Submit"><br>
+        </form>
+    </div>
+</div>
+-----------------------------------------------------------------
+******************************************************************
+<form [formGroup]="loginForm" (submit)="fn1()">
+    User Name:
+    <div class="form-group" [ngClass]="{'has-error':loginForm.get('userName').errors && loginForm.get('userName').touched } ">
+    <input class="form-control" type="text" formControlName="userName"><br>
+    
+    <span class="help-block" *ngIf="loginForm.get('userName').errors && loginForm.get('userName').touched">
+    <span *ngIf="loginForm.get('userName').errors.required">User Name is required</span>
+    <span *ngIf="loginForm.get('userName').errors.minlength">Minimum 4 characters</span>
+    </span>
+</div>
+    Password:
+    <input class="form-control" type="password" formControlName="password"><br>
+    Email:
+    <input class="form-control" type="email" formControlName="email"><br>
+    <input class="btn btn-info" type="submit" value="Submit">
+</form>
+<br>
+{{loginForm.value | json}}
+
+
+export class LoginComponent implements OnInit {
+
+  loginForm:any;
+  // x=new FormGroup();
+
+  constructor(private fb:FormBuilder) { 
+    this.loginForm=this.fb.group({
+      userName:['',[Validators.required, Validators.minLength(4)]],
+      password:['rama',Validators.required],
+      email: ['', [Validators.required,
+        Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')]]
+    });
+  }
+
+  ngOnInit(): void {
+  }
+
+  // onSubmit(value)
+  // {
+  //   alert(JSON.stringify(value));
+
+  // }
+  fn1()
+  {
+    alert(JSON.stringify(this.loginForm.value));
+    alert("Valid?:"+this.loginForm.valid);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Reactive forms		(Reactive forms module in app.module.ts)
+
+<form [formGroup]="angForm">			/*	(ngSubmit)=.....	*/
+  <input type = "text" 
+        name = "email" 
+        placeholder = "email" 
+        formControlName="email" 
+        #email>
+  <br/>
+  <input type = "password" 
+        name = "pwd" 
+        placeholder = "password" 
+        formControlName="password" 
+        #password>
+  <br/>
+  <input type = "submit" 
+          value = "submit" 
+          (click) = "onClickSubmit(email.value, password.value)" >
+</form>
+
+
+
+
+
+

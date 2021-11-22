@@ -1,0 +1,46 @@
+1) ng g c user
+	this will create user component
+2) ng g class user
+	this will create User class
+		    export class User {
+ 		    userId : number;
+		    id : number;
+		    title : string;
+		    completed : boolean
+			}
+
+3) ng g s user
+	this will create UserService
+	in user service, inject httpClient component to the constructor.
+		To be able to use httpClient component, the HttpClientModule should be imported in app.module.ts
+		import { HttpClientModule } from '@angular/common/http';
+		imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
+  ],
+
+	now, create a method in user service
+		getUsers10()
+		{
+			let url="https://jsonplaceholder.typicode.com/todos";
+			return this.http.get(url);
+		}
+
+4) app.component.ts
+		instance variable declare as:
+		users:any;
+		inject our service to the constructor
+			 constructor(private service:UserService) { }
+		create a method
+		getUsers()
+		{
+			this.service.getUsers10().subscribe(data=>{this.users=data});
+		}
+
+5) in html display all users as:
+	<button (click)="getEmployees()">Get Employees from rest api</button><br>
+<ul>
+    <li *ngFor="let user of users">{{user.title}}</li>
+</ul>

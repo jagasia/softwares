@@ -1,0 +1,31 @@
+
+C:\Users\rjaga>docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED             STATUS             PORTS                                                NAMES
+98a2ea29060f   wurstmeister/kafka       "start-kafka.sh"         About an hour ago   Up About an hour   0.0.0.0:9092->9092/tcp                               kafka_kafka_1
+2c9ea685d4f3   wurstmeister/zookeeper   "/bin/sh -c '/usr/sb…"   About an hour ago   Up About an hour   22/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp   kafka_zookeeper_1
+
+C:\Users\rjaga>docker exec -it 98a2ea29060f bash
+bash-5.1# kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic test
+Created topic test.
+bash-5.1#
+
+
+bash-5.1# kafka-console-producer.sh --broker-list localhost:9092 --topic test
+>this is the message
+abcd
+>efgh
+>ijkl
+>emop
+>qrst
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+install aws cli
+go to env variables
+	AWS_ACCESS_KEY_ID
+	AWS_DEFAULT_REGION
+	AWS_SECRET_ACCESS_KEY
+
+set the above variables. Or configure in cli itself:
+	aws configure
+
+To get secret key:
+	My Security Credentials in your login menu
+	access management
+	Your security credentials	
+		Access Keys
+			you cannot find secret key. Only you can create new key id and download the secret key
+
+------------------------------------------------
+To create a registry in ECR		(Elastic Container Registry)
+	i) we can create in ECR in aws portal
+	or)
+	ii) aws ecr create-repository --repository-name jag3 --region ap-south-1
+		the above command is an example and it creates the registry named as "jag3" in ap south region
+
+Now go to ECR in aws portal and check if the "jag3" registry is created.
+	select the registry.
+	click the "push commands" button
+	you will get 3 commands 
+		remember to tag the local image to the global repository before pushing
+
+	ex:
+		docker build -t jag3 .
+		docker tag jag3 029756575211.dkr.ecr.ap-south-1.amazonaws.com/jag3:latest
+		docker push 029756575211.dkr.ecr.ap-south-1.amazonaws.com/jag3:latest
