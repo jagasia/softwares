@@ -1,0 +1,54 @@
+https://medium.com/swlh/angular-unit-testing-jasmine-karma-step-by-step-e3376d110ab4
+
+1) lets create an angular project
+	ng new suramya --routing --style=css
+
+2) What is karma jasmine?
+	Jasmine is the testing framework for testing angular projects
+	Karma is the test runner
+
+3) When we use karma, then we will have a karma configuration file in our angular project
+
+WHenever we create an angular project, by default a file is being created
+	karma.conf.js
+
+this is the configuration file for configuring testing
+	i) we specify the framework (jasmine) we choose.
+	ii) browser	(chrome)
+	
+
+Lets open our project in VS Code
+
+	
+first, REMEMBER, copy the karma.conf.js (OR ITS CONTENT safely before we experiment)
+
+-------------
+1) lets run a command in cmd prompt to create this conf file
+	karma init
+
+	** if you get error that karma is not recognized command, then we need to install it using below command
+		npm install -g karma-cli
+
+
+
+framework:
+	jasmine
+
+autowatch:
+	true			means, whenever, we modify our spec.ts, automatically our test runner will be notified and updated
+
+
+
+so far, we have not started testing
+	to start testing
+		command is 
+			ng test	
+
+
+
+
+
+describe		there can be lot of describe
+fdescribe		f - first			this describe must be executed first.	(only one)
+xdescribe		x - exclude			ignore some describes for time being.
+
