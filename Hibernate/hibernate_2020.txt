@@ -1,0 +1,43 @@
+    <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration  
+        DTD//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+    <hibernate-configuration>
+    <session-factory>
+       <property name="connection.url">jdbc:oracle:thin:@localhost:1522:xe</property>
+
+       <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+
+       <property name="dialect">org.hibernate.dialect.OracleDialect</property>
+
+       <property name="connection.username">sys as sysdba</property>
+       <property name="connection.password">password</property>
+
+       <!-- DB schema will be updated if needed -->
+       <property name="hbm2ddl.auto">update</property>
+       <property name="show_sql">true</property>
+       <property name="format_sql">true</property>
+
+   	<mapping resource="patient.hbm.xml" />
+   </session-factory>
+   </hibernate-configuration>
+
+
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "model.Patient" table = "PATIENT">
+      
+      <meta attribute = "class-description">
+         This class contains the employee detail. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="sequence"/>
+      </id>
+      
+      <property name = "name" column = "name" type = "string"/>
+      <property name = "age" column = "age" type = "int"/>      
+   </class>
+</hibernate-mapping>

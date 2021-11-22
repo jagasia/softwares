@@ -1,0 +1,72 @@
+<!-- Java bean validation API - Spec -->
+<dependency>
+    <groupId>javax.validation</groupId>
+    <artifactId>validation-api</artifactId>
+    <version>2.0.1.Final</version>
+</dependency>
+ 
+<!-- Hibernate validator - Bean validation API Implementation -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>6.0.11.Final</version>
+</dependency>
+ 
+<!-- Verify validation annotations usage at compile time -->
+<dependency>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-validator-annotation-processor</artifactId>
+  <version>6.0.11.Final</version>
+</dependency>
+ 
+
+
+public class User {
+ 
+    @NotNull(message = "Please enter id")
+    private Long id;
+ 
+    @Size(max = 20, min = 3, message = "{user.name.invalid}")
+    @NotEmpty(message = "Please enter name")
+    private String name;
+ 
+    @Email(message = "{user.email.invalid}")
+    @NotEmpty(message = "Please enter email")
+    private String email;
+ 
+    public User(Long id, String name, String email) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+ 
+    //Setters and Getters
+}
+
+ValidationMessages.properties
+user.name.invalid=Invalid Username
+user.email.invalid=Invalid Email
+
+ public static void main(String[] args) 
+    {
+        //Create ValidatorFactory which returns validator
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+         
+        //It validates bean instances
+        Validator validator = factory.getValidator();
+ 
+        User user = new User(null, "1", "abcgmail.com");
+ 
+        //Validate bean
+        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+ 
+        //Show errors
+        if (constraintViolations.size() > 0) {
+            for (ConstraintViolation<User> violation : constraintViolations) {
+                System.out.println(violation.getMessage());
+            }
+        } else {
+            System.out.println("Valid Object");
+        }
+    }

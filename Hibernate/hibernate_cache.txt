@@ -1,0 +1,50 @@
+in pom.xml, add dependency:
+	<dependency>
+		<groupId>net.sf.ehcache</groupId>
+		<artifactId>ehcache</artifactId>
+		<version>2.10.13</version>
+	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-ehcache</artifactId>
+		<version>4.1.6.Final</version>
+	</dependency>
+
+in hibernate.cfg.xml file (inside session-factory):
+	<property name="hibernate.cache.use_second_level_cache">true</property>
+	<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+
+
+in entity class, add annotations:
+
+@Entity
+@Table(name="emp")
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
+
+READ_ONLY			ONLY FOR SELECT QUERIES
+READ_WRITE			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for query cache:
+in hibernate.cfg.xml
+	<property name="hibernate.cache.use_query_cache">true</property>
+
+in code:
+	Query q1=session.createQuery("from Emp e where e.id=100");
+	q1.setCacheable(true);
+	
+	do this for both the queries

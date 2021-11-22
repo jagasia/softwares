@@ -1,0 +1,51 @@
+
+Difference Between Hibernate Save And Persist Methods
+Difference Between Merge And Update Methods In Hibernate
+
+https://www.java4s.com/hibernate/hibernate-one-to-one-mapping-using-annotations/
+
+https://www.java4s.com/hibernate/hibernate-many-to-one-annotation-example/
+https://www.java4s.com/hibernate/hibernate-many-to-many-mapping-using-annotations/
+https://dzone.com/tutorials/java/hibernate/hibernate-example/hibernate-mapping-many-to-many-using-annotations-1.html
+
+
+Employee
+	employeeId
+	fullName
+	
+@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="deptId",referencedColumnName="departmentId")
+	Department department
+
+Department
+@Id
+	@Column(name = "departmentId")
+	private int departmentId;
+
+----------------------------------------------------
+Customer
+
+@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="venid",referencedColumnName="vid")
+
+Vendor
+@Id
+	@Column(name = "vid")
+	private int vendorId;
+
+Categories.java
+@ManyToMany(targetEntity=Item.class,cascade=CascadeType.ALL)
+@JoinTable(name="categories_items",joinColumns=@JoinColumn(name="cat_id_fk",referencedColumnName="catid"),inverseJoinColumns=@JoinColumn(name="item_id_fk",referencedColumnName="itemid"))
+private Set items;
+
+
+Item.java (items table)
+@ManyToMany(targetEntity=Categories.class,mappedBy="items")
+private Set  categories;
+
+
+
+
+
+
+

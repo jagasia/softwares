@@ -1,0 +1,22 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="connection.url">jdbc:oracle:thin:@localhost:1522:xe</property>
+
+		<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+
+		<property name="dialect">org.hibernate.dialect.OracleDialect</property>
+
+		<property name="connection.username">sys as sysdba</property>
+		<property name="connection.password">password</property>
+
+		<!-- DB schema will be updated if needed -->
+		<property name="hbm2ddl.auto">update</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">false</property>
+		<mapping resource="movie.hbm.xml" />
+	<!-- 	<mapping class="mla.mar_20_1.model.Actor" /> -->
+	</session-factory>
+</hibernate-configuration>
