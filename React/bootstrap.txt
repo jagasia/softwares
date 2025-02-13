@@ -1,0 +1,5 @@
+npm i bootstrap@5.3.3
+
+index.js
+
+import "bootstrap/dist/css/bootstrap.min.css";

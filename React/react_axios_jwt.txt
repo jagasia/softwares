@@ -1,0 +1,77 @@
+
+
+
+First of all when you login and send username and password to backend then in response you get token_id. now try to token store in session_storage and redirect to your desire page. now you take token_id in your desire page and store one variable as like..
+
+let user = JSON.parse(sessionStorage.getItem('data'));
+const token = user.data.id;
+now you have token and pass in the header and get data in response
+
+const api = `your api here`
+axios.get(api, { headers: {"Authorization" : `Bearer ${token}`} })
+        .then(res => {
+            console.log(res.data);
+        this.setState({
+            items: res.data,  /*set response data in items array*/
+            isLoaded : true,
+            redirectToReferrer: false
+        })
+note : you should set blank items array in initial setState as like
+
+this.state={
+            items:[],
+            isLoaded: false,
+            redirectToReferrer:false,
+            token:''
+        }
+
+===================================
+
+Include your token as authorization key as below.
+
+axios.post(url,data, {
+    headers: {
+        'authorization': your_token,
+        'Accept' : 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => {
+    // return  response;
+})
+.catch((error) => {
+    //return  error;
+});
+
+=========================================
+This is example for create axios instance with API Base URL and JWT_TOKEN globally and access it for different API calls
+
+step 1 : create static instance for axios
+
+static axiosInstance =  axios.create({
+    baseURL: "BASE_API_URL",
+    timeout: 5000,
+    headers: {
+      'Authorization': "JWT_TOKEN",
+      'Content-Type': 'application/json'
+    }
+  }); 
+this is the second setep access axiosInstance already create and use it with dynamic REST API calls
+
+step 2 : access static instance and bind API_URL to base URL
+
+export const x = (data) => dispatch => {
+    axiosInstance.post('API_URL',
+        {
+            PLAYLOAD
+        })
+        .then(function (response) {
+
+        })
+        .catch(function (error) {
+
+        });
+}
+API URL = BASE_API_URL + API_URL and single JWT_TOKEN for all and this very clean , clear and working.
+
+https://stackoverflow.com/questions/51586458/how-to-pass-header-jwt-token-with-axios-react

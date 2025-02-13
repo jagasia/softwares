@@ -1,0 +1,4 @@
+npm install react
+npm install -g create-react-app
+npx create-react-app jag1
+npm start

@@ -1,0 +1,233 @@
+import axios from "axios";
+
+const URL="http://localhost:5001/branch";
+class BranchService
+{
+    getAllBranches()
+    {
+        return axios.get(URL);
+    }
+
+    findBranchById(bid)
+    {
+        return axios.get(URL+"/"+bid);
+    }
+
+    addBranch(branch)
+    {
+        return axios.post(URL,branch);
+    }
+
+    updateBranch(branch)
+    {
+        return axios.put(URL,branch);
+    }
+
+    deleteBranch(bid)
+    {
+        return axios.delete(URL+"/"+bid);
+    }
+}
+
+export default new BranchService;
+
+
+
+//=================================================
+
+import { Component } from "react";
+import branchService from "../services/branch-service";
+
+export default class BranchComponent extends Component
+{
+    constructor()
+    {
+        super();
+        this.state={
+            bid:'',
+            bname:'',
+            bcity:'',
+            errors:{
+                bid:'',
+                bname:'',
+                bcity:''
+            }
+        };
+       
+
+        this.handleChange=this.handleChange.bind(this);
+        this.addBranch=this.addBranch.bind(this);
+        this.updateBranch=this.updateBranch.bind(this);
+        this.deleteBranch=this.deleteBranch.bind(this);
+    }
+
+    handleChange(event)
+    {
+        this.setState({[event.target.name]:event.target.value});
+    }
+
+    addBranch()
+    {
+        //check the state errors part. then only send the request to add
+        branchService.addBranch(this.state);
+    }
+    
+    updateBranch()
+    {
+        branchService.updateBranch(this.state);
+    }
+
+    deleteBranch()
+    {
+        branchService.deleteBranch(this.state.bid);
+    }
+
+    render()
+    {
+        return <div>
+            <h2 className="text-center">Branch Form</h2>
+            <form>
+                Id: <input type="text" name="bid" className="form-control" onChange={this.handleChange} />
+                Name: <input type="text" name="bname" className="form-control" onChange={this.handleChange} />
+                City: <input type="text" name="bcity" className="form-control" onChange={this.handleChange} />
+                <br/>
+                <button type="button" className="btn btn-success" onClick={this.addBranch} >Add</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" className="btn btn-warning" onClick={this.updateBranch} >Update</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" className="btn btn-danger" onClick={this.deleteBranch} >Delete</button>
+            </form>
+            <br/>
+
+        </div>
+    }
+}
+
+
+
+//===============================
+import { Component } from "react";
+import branchService from "../services/branch-service";
+
+export default class DisplayBranch extends Component
+{
+
+    constructor()
+    {
+        super();
+        this.state={branches:[]};
+        branchService.getAllBranches().then((response)=>{
+            this.setState({branches:response.data});
+        }
+            
+        );
+    }
+
+    render()
+    {
+        return (<div>
+
+<table className="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>City</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        this.state.branches.map((branch)=>{
+                            return(<tr>
+                                <td>{branch.bid}</td>
+                                <td>{branch.bname}</td>
+                                <td>{branch.bcity}</td>
+                            </tr>);
+                        })
+                    }
+                </tbody>
+            </table>
+
+        </div>);
+    }
+}
+
+//==============================
+import logo from './logo.svg';
+import './App.css';
+import BranchComponent from './components/branch-component';
+import DisplayBranch from './components/display-branches';
+
+function App() {
+  return (
+    <div className="App">
+      <div className="jumbotron">
+        <h1 className="text-center">Branch Project</h1>
+      </div>
+      <div className="row">
+        <div className="col-sm-3"></div>
+        <div className="col-sm-3">
+          <BranchComponent />
+        </div>
+        <div className="col-sm-3"></div>
+        <div className="col-sm-3"></div>
+      </div>
+      <div className="row">
+        <div className="col-sm-2"></div>
+        <div className="col-sm-8">
+          <DisplayBranch />
+        </div>
+        <div className="col-sm-2"></div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
+
+==================================
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>

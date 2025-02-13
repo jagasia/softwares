@@ -1,0 +1,82 @@
+npm install create-react-app
+
+To create a new app, you may choose one of the following methods:
+Using npx
+	npx create-react-app react-frontend
+
+Using npm
+	npm init react-app react-frontend
+	or
+
+	npm install -g create-react-app  
+	create-react-app reactproject  
+
+npm init is available in npm 6+
+
+Using Yarn
+	yarn create react-app react-frontend
+
+Running any of these commands will create a directory called react-frontend inside the current folder. Inside that directory, it will generate the initial project structure and install the transitive dependencies:
+---------------------------------------------
+Pre-requisite knowledge
+Filter
+Map
+Reduce
+let, const, arrow functions, template literals, default parameters, object literals, rest and spread operators, destructuring assignment
+
+---------------------------------------------
+
+JSX vs HTML
+
+return (<div><h1>Hello world</h1></div>)
+
+vs
+
+return React.createElement('div',null,'<h1>','Hello world','</h1>')
+modified as
+return React.createElement('div',null,React.createElement('h1',null,'Hello world')
+
+
+install bootstrap
+	npm install bootstrap --save
+
+
+index.js
+	import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+JSX:
+https://reactjs.org/docs/introducing-jsx.html
+
+
+to add node_modules folder to a project folder
+	npm install
+
+to remove node_modules folder from a project folder
+do the blow command once:
+	npm install -g rimraf
+	
+	rimraf node_modules
+
+
+
+
+
+
+npm install react-router-dom --save
+
+---------------------------------------------------------------------------
+npm config set strict-ssl false
+
+npm cache verify
+npm cache clean
+
+npm i -g react
+npm i -g react-dom
+npm i -g react-scripts
+npm i -g cra-templates
+
+
+
+-------------------------------------------
+https://forms.office.com/r/NnXjfLsbsN

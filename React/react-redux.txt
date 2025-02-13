@@ -1,0 +1,17 @@
+npm i redux react-redux
+
+or
+
+npm i react-redux @reduxjs/toolkit
+
+create a store
+	store.js
+
+import { configureStore } from "@reduxjs/toolkit";
+
+export const store=configureStore({
+	reducer: {
+		customers: 
+	}
+});
+

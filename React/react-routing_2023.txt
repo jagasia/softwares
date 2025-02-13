@@ -1,0 +1,91 @@
+1) install react-router-dom to the project
+	npm i react-router-dom
+2) wrap the App component inside <BrowserRouter> in index.js
+3) in App.js
+<Routes>
+        <Route path='/about' element={  <About />}></Route>
+        <Route path='/contact' element={  <Contact /> } ></Route>
+      </Routes>
+4) in Menu.js
+<Link to="/about" className='nav-link' >About</Link>
+
+
+navigate with paramters:------------
+<Route path="/product/:id" component={FunctionComp} />
+
+let { id } = useParams();
+
+
+--------------------------------
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+const Login = () => {
+    const [username, setUsername]=useState('')
+    const [password, setPassword]=useState('')
+    const [message, setMessage]=useState('')
+
+    const navigate=useNavigate();
+
+    function fnLogin()
+    {
+        if(username==password)
+        {
+            setMessage("")
+            navigate("/",{state:username})
+        }else{
+            setMessage("Login failed")
+        }
+    }
+
+
+  return (
+    <div>
+        Username:<input type="text" id="username" className="form-control" onChange={(e)=>setUsername(e.target.value)} />
+        Password:<input type="password" id="password" className="form-control" onChange={(e)=>setPassword(e.target.value)} />
+        <br/>
+        <input type="button" className='btn btn-primary' value="Login" onClick={fnLogin} />
+        {
+            message.length>0 && <div className='text-danger'>Login failed</div>
+        }
+    </div>
+  )
+}
+
+export default Login
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+const Home=()=>{
+
+    const [id, setId]=useState(1);
+    const [name, setName]=useState('Jag');
+    const location=useLocation();
+    
+useEffect(()=>{
+    setName(location.state);
+},null);
+
+    return <div>
+        Home Page...<br/>
+        Welcome {name}
+    </div>
+}
+export default Home;

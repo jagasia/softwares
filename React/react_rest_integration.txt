@@ -1,0 +1,25 @@
+1) npx create-react-app react-rest
+2) npm add axios
+3) create a service class	AirlineService.js
+	const URL='http://api.instantwebtools.net/v1/airlines';
+	class AirlineService
+	{
+		getAirlines()
+		{
+			return axios.get(URL);
+		}
+	}
+	export default new AirlineService;
+4) create a component class	AirlineComponent.js
+	class AirlineComponent extends Component
+	{
+		constructor(props)
+		{
+			super(props);
+			this.state={users:[]};
+			AirlineService.getAirlines().then((response)=>{
+				this.setState({users:response.data});
+			});
+		}
+	}
+	export default AirlineComponent;

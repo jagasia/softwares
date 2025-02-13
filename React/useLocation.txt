@@ -1,0 +1,19 @@
+import { useNavigate } from 'react-router-dom';
+
+const navigate=useNavigate();
+
+navigate("/",{state:obj},{replace:false})
+
+
+
+
+----------------------------------
+import { useLocation } from 'react-router-dom';
+
+  const location = useLocation();
+
+if (location.state != null) {        
+        return location.state;
+
+
+
